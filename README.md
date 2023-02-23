@@ -1,9 +1,5 @@
 # Discord_CSharpBot
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Issues][issues-shield]][issues-url]
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -57,7 +53,7 @@ Here's why I came up with the idea:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Make sure you have DOTNET 7.0 installed (latest from the state of now: 23.02.2023 [DD/MM/YYYY]
+Make sure you have DOTNET 7.0 installed (latest from the state of now: 23.02.2023 [DD/MM/YYYY])
 
 ### Installation
 
