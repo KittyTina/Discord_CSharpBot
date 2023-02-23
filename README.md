@@ -22,7 +22,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -48,9 +47,7 @@ Here's why I came up with the idea:
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project.
-
-* [![C#][C#.cs]][CSharp-url]
+* [![Cs][C#.cs]][CSharp-url]
 * [![DiscordSharp][DiscordSharp]][DiscordSharp-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
