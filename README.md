@@ -126,8 +126,6 @@ Distributed under the GNU General Public License v3.0. See `LICENSE.txt` for mor
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
 Project Link: [https://github.com/KittyTina/Discord_CSharpBot](https://github.com/KittyTina/Discord_CSharpBot)
 
 [contributors-url]: https://github.com/KittyTina/Discord_CSharpBot/graphs/contributors
