@@ -71,6 +71,7 @@ _Below is an example of how you can instruct your audience on installing and set
 3. Enter your API in `config.json`
    ```json
    {
+   "BOT_TOKEN": "ENTER HERE"
    "API_KEY": "ENTER YOUR API"
    }
    ```
