@@ -68,11 +68,7 @@ _Below is an example of how you can instruct your audience on installing and set
    ```sh
    git clone https://github.com/KittyTina/Discord_CSharpBot.git
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.json`
+3. Enter your API in `config.json`
    ```json
    {
    "API_KEY" = "ENTER YOUR API"
