@@ -86,11 +86,14 @@ public class Program
                 string responseContent = await responseMessage.Content.ReadAsStringAsync();
                 JObject responseData = JObject.Parse(responseContent);
                 JToken timeSeriesDay = responseData["Time Series (Daily)"];
-                foreach (KeyValuePair<string, JToken> kvp in timeSeriesDay)
+                if (timeSeriesDay is JObject jObject)
                 {
-                    string date = kvp.Key;
-                    decimal closestPrice = (decimal)kvp.Value["4. close"];
-                    Console.WriteLine($"{date} : {closestPrice}");
+                    foreach (var jProperty in jObject.Properties())
+                    {
+                        string date = jProperty.Name;
+                        decimal closestPrice = (decimal)jProperty.Value["4. close"];
+                        Console.WriteLine($"{date} : {closestPrice}");
+                    }
                 }
             }
         }
