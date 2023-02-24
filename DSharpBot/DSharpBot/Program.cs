@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 public class Program
 {
@@ -43,6 +44,16 @@ public class Program
             case "hey":
                 await command.RespondAsync("hey! :)");
                 break;
+            case "stock":
+                string symbol = command.Data.Options.FirstOrDefault(o => o.Name == "symbol").Value.ToString();
+                if(string.IsNullOrEmpty(symbol))
+                {
+                    await command.RespondAsync(null, null, false, false, null, null, CreateEmbed("Invalid Symbol!", "Please provide me a valid stock symbol.", Color.Red));
+                    return;
+                }
+                Embed stockEmbed = await GetStockDataAsync(symbol);
+                await command.RespondAsync(embeds: new[] { stockEmbed });
+                break;
         }
     }
 
@@ -57,12 +68,11 @@ public class Program
         var guild = _client.GetGuild(ulong.Parse(_config["GUILD_ID"]));
         var guild_cmd = new SlashCommandBuilder();
 
-        guild_cmd.WithName("ping");
-        guild_cmd.WithDescription("Answers with pong");
+        guild_cmd.WithName("ping").WithDescription("Answers with pong");
 
-        guild_cmd.WithName("hey");
-        guild_cmd.WithDescription("Answers with hey :)");
-        
+        guild_cmd.WithName("hey").WithDescription("Answers with hey :)");
+
+        guild_cmd.WithName("stock").WithDescription("Returns a stock price").AddOption("symbol", ApplicationCommandOptionType.String, "e.g. TSLA or AMZN", true);
 
         try
         {
@@ -73,7 +83,7 @@ public class Program
         }
     }
 
-    public async Task GetStockDataAsync(string symbol)
+    public async Task<Embed> GetStockDataAsync(string symbol)
     {
         string api_key = _config["API_KEY"];
         string url = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={symbol}&apikey={api_key}";
@@ -86,16 +96,25 @@ public class Program
                 string responseContent = await responseMessage.Content.ReadAsStringAsync();
                 JObject responseData = JObject.Parse(responseContent);
                 JToken timeSeriesDay = responseData["Time Series (Daily)"];
-                if (timeSeriesDay is JObject jObject)
+                JProperty latestPriceProperty = timeSeriesDay.FirstOrDefault().ToObject<JObject>().Properties().FirstOrDefault(property => property.Name.EndsWith("close"));
+                if (latestPriceProperty != null)
                 {
-                    foreach (var jProperty in jObject.Properties())
-                    {
-                        string date = jProperty.Name;
-                        decimal closestPrice = (decimal)jProperty.Value["4. close"];
-                        Console.WriteLine($"{date} : {closestPrice}");
-                    }
+                    decimal latestPrice = (decimal)latestPriceProperty.Value;
+                    string title = $"Stock data for {symbol}";
+                    string description = $"Latest closing price: {latestPrice:C}";
+                    return CreateEmbed(title, description, Color.Green);
                 }
             }
         }
+        return null;
+    }
+    private Embed CreateEmbed(string title, string description, Color color)
+    {
+        var builder = new EmbedBuilder();
+        builder
+            .WithTitle(title)
+            .WithDescription(description)
+            .WithColor(color);
+        return builder.Build();
     }
 }
