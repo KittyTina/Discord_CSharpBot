@@ -37,17 +37,11 @@ Here's why I came up with the idea:
 * The bot should be written from the start without copying others in the slightest way - it obviously will happen, that you can find features that are similar to other bots, but they are writte by me.
 * It should be usable for YOU to learn about C# and Discord itself :smile:
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
 * [![Cs][C#.cs]][CSharp-url]
 * [![DiscordSharp][DiscordSharp]][DiscordSharp-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- GETTING STARTED -->
@@ -72,8 +66,6 @@ _Below is an example of how you can instruct your audience on installing and set
    }
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
@@ -83,14 +75,8 @@ This Discord Bot should be in your own server, you can just simply invite it to 
 
 _For more examples, please refer to the [Documentation](https://discordnet.dev/guides/getting_started/first-bot.html)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 See the [open issues](https://github.com/KittyTina/Discord_CSharpBot/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -107,17 +93,11 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/YourFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the GNU General Public License v3.0. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
