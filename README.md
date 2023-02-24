@@ -59,7 +59,8 @@ _Below is an example of how you can instruct your audience on installing and set
    ```json
    {
    "BOT_TOKEN": "ENTER HERE",
-   "API_KEY": "ENTER YOUR API"
+   "API_KEY": "ENTER YOUR API",
+   "GUILD_ID":  "YOUR GUILD ID"
    }
    ```
 
