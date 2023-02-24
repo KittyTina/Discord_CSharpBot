@@ -1,4 +1,5 @@
 {
-  "BOT_TOKEN": "",
-  "API_KEY": "ENTER YOUR API"
+  "BOT_TOKEN": "TOKEN",
+  "API_KEY": "ENTER YOUR API",
+  "GUILD_ID":  "YOUR GUILD ID"
 }
