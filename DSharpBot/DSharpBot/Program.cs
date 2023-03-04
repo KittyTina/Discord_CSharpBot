@@ -1,13 +1,11 @@
 ﻿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
+using Discord.Commands;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using System.Reflection.Metadata.Ecma335;
+using Microsoft.VisualBasic;
 
 public class Program
 {
@@ -61,6 +59,27 @@ public class Program
                     await command.RespondAsync("Error: Unable to retrieve stock data.");
                 }
                 break;
+            case "clearchat":
+                if (!((SocketGuildUser)command.User).GuildPermissions.Administrator)
+                {
+                    await command.Channel.SendMessageAsync(null, false, CreateEmbed("Insufficient Permissions", "You don't have permissions to use this command!", Color.Red));
+                    return;
+                }
+                int count = (int)command.Data.Options.First().Value;
+
+                if (count <= 0)
+                {
+                    await command.Channel.SendMessageAsync(null, false, CreateEmbed("Logic Error", $"How am I supposed to remove {count} messages you donkey?????!!!", Color.Red));
+                    return;
+                }
+                try 
+                { 
+                    await ClearChatAsync(command, count);
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                break;
         }
     }
 
@@ -74,6 +93,7 @@ public class Program
 
         var guild = _client.GetGuild(ulong.Parse(_config["GUILD_ID"]));
         var guild_cmd = new SlashCommandBuilder();
+        var rmvcmd = new SlashCommandBuilder();
 
         guild_cmd.WithName("ping").WithDescription("Answers with pong");
 
@@ -81,10 +101,15 @@ public class Program
 
         guild_cmd.WithName("stock").WithDescription("Returns a stock price").AddOption("symbol", ApplicationCommandOptionType.String, "e.g. TSLA or AMZN", true);
 
+        rmvcmd.WithName("clearchat").WithDescription("Clears the chat with the according number").AddOption("count", ApplicationCommandOptionType.Number, "e.g 3", true)
+            .WithDefaultPermission(false);
+
         try
         {
             await guild.CreateApplicationCommandAsync(guild_cmd.Build());
-        }catch(ApplicationCommandException ex)
+            await guild.CreateApplicationCommandAsync(rmvcmd.Build());
+        }
+        catch(ApplicationCommandException ex)
         {
             Console.WriteLine(JsonConvert.SerializeObject(ex.Errors, Formatting.Indented));
         }
@@ -132,6 +157,14 @@ public class Program
         }
         return null;
     }
+
+    public async Task ClearChatAsync(SocketSlashCommand cmdctx, int count)
+    {
+        var channel = cmdctx.Channel as SocketTextChannel;
+        var messages = await channel.GetMessagesAsync(count + 1).FlattenAsync(); // +1 for last message that the bot sends
+        await channel.DeleteMessagesAsync(messages);
+    }
+
     private Embed CreateEmbed(string title, string description, Color color)
     {
         var builder = new EmbedBuilder();
