@@ -65,7 +65,8 @@ public class Program
                     await command.Channel.SendMessageAsync(null, false, CreateEmbed("Insufficient Permissions", "You don't have permissions to use this command!", Color.Red));
                     return;
                 }
-                int count = (int)command.Data.Options.First().Value;
+                double count = (double)command.Data.Options.First().Value;
+                int counter = ((int)count);
 
                 if (count <= 0)
                 {
@@ -74,7 +75,7 @@ public class Program
                 }
                 try 
                 { 
-                    await ClearChatAsync(command, count);
+                    await ClearChatAsync(command, counter);
                 }catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
