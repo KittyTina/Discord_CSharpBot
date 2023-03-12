@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.VisualBasic;
+using System.Runtime.InteropServices;
+using System.Text;
 
 public class Program
 {
@@ -81,6 +83,29 @@ public class Program
                     Console.WriteLine(ex.Message);
                 }
                 break;
+            case "feedback":
+                int rating = int.Parse(command.Data.Options.First(x => x.Name == "rating").Value.ToString());
+
+                // Create a new paste with the rating data
+                string pastebinApiKey = "YOUR_API_KEY_HERE";
+                string pastebinApiUrl = "https://pastebin.com/api_post.php";
+                string pasteData = $"Rating: {rating}";
+                string postParams = $"api_option=paste&api_dev_key={pastebinApiKey}&api_paste_code={Uri.EscapeDataString(pasteData)}";
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.PostAsync(pastebinApiUrl, new StringContent(postParams, Encoding.UTF8, "application/x-www-form-urlencoded"));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseText = await response.Content.ReadAsStringAsync();
+                        var pasteUrl = responseText.Trim();
+                        await command.RespondAsync($"Thank you for your feedback! Your rating of {rating} has been saved anonymously to {pasteUrl}");
+                    }
+                    else
+                    {
+                        await command.RespondAsync("Sorry, there was an error creating the paste. Please try again later.");
+                    }
+                }
+                break;
         }
     }
 
@@ -101,6 +126,18 @@ public class Program
         guild_cmd.WithName("hey").WithDescription("Answers with hey :)");
 
         guild_cmd.WithName("stock").WithDescription("Returns a stock price").AddOption("symbol", ApplicationCommandOptionType.String, "e.g. TSLA or AMZN", true);
+        guild_cmd.WithName("feedback").WithDescription("Give the bot a feedback. This gets saved in a pastebin but anonymous!")
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("rating")
+                .WithDescription("1-5 that fits you how you would rate this bot.")
+                .WithRequired(true)
+                .AddChoice("Horrible", 1)
+                .AddChoice("Yeah ... no, thank you", 2)
+                .AddChoice("It's ok!", 3)
+                .AddChoice("Pretty Good :)", 4)
+                .AddChoice("Awesome! :D", 5)
+                .WithType(ApplicationCommandOptionType.Integer)
+                );
 
         rmvcmd.WithName("clearchat").WithDescription("Clears the chat with the according number").AddOption("count", ApplicationCommandOptionType.Number, "e.g 3", true)
             .WithDefaultPermission(false);
@@ -110,7 +147,7 @@ public class Program
             await guild.CreateApplicationCommandAsync(guild_cmd.Build());
             await guild.CreateApplicationCommandAsync(rmvcmd.Build());
         }
-        catch(ApplicationCommandException ex)
+        catch(HttpException ex)
         {
             Console.WriteLine(JsonConvert.SerializeObject(ex.Errors, Formatting.Indented));
         }
